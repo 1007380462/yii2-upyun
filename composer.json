@@ -1,13 +1,14 @@
 {
-    "name": "upyun/sdk",
-    "description": "UPYUN sdk for php",
-    "keywords": ["UPYUN", "sdk"],
+    "name": "lucasguo/yii2-upyun",
+    "description": "UPYUN sdk for yii2 framework base on offical sdk",
+    "keywords": ["UPYUN", "sdk", "yii2"],
     "type": "library",
     "minimum-stability": "stable",
     "homepage": "https://github.com/upyun/php-sdk/",
     "license": "MIT",
     "require": {
         "php": ">=5.3.0",
+        "yiisoft/yii2": ">=2.0.6",
         "ext-curl": "*"
     },
     "require-dev": {
@@ -29,9 +30,15 @@
         {
           "name": "sabakugaara",
           "email": "senellise@gmail.com"
+        },
+        {
+          "name": "lucasguo",
+          "email": "guoliubin@gmail.com"
         }
     ],
     "autoload": {
-        "files": ["upyun.class.php"]
+        "psr-4": {
+            "lucasguo\\upyun\\": ""
+        }
     }
 }

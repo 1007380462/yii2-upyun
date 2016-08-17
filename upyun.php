@@ -1,5 +1,9 @@
 <?php
-class UpYun
+namespace lucasguo\upyun;
+
+use yii\base\Component;
+use yii\web\UploadedFile;
+class UpYun extends Component
 {
     const VERSION = '2.2.0';
 
@@ -26,8 +30,18 @@ class UpYun
     private $_timeout = 30;
     private $_file_secret = null;
     private $_content_md5 = null;
+    
+    /**
+     * @var string 将文件上传到哪个目录中，例如"/uploads/"，默认为根目录
+     */
+    public $basePath = "/";
+    
+    /**
+     * @var bool 是否是自主源站，用于计算upload方法后返回的地址，自主站返回的为相对路径，不是自主站则返回图片完整的url
+     */
+    public $useOwnDomain = false;
 
-    protected $endpoint;
+    protected $endpoint = self::ED_AUTO;
 
     /**
      * @var string: UPYUN 请求唯一id, 出现错误时, 可以将该id报告给 UPYUN,进行调试
@@ -43,14 +57,60 @@ class UpYun
      * @param null $endpoint
      * @param int $timeout
      */
-    public function __construct($bucketname, $username, $password, $endpoint = NULL, $timeout = 30)
-    {
-        $this->_bucketname = $bucketname;
-        $this->_username = $username;
-        $this->_password = md5($password);
-        $this->_timeout = $timeout;
+//     public function __construct($bucketname, $username, $password, $endpoint = NULL, $timeout = 30)
+//     {
+//         $this->_bucketname = $bucketname;
+//         $this->_username = $username;
+//         $this->_password = md5($password);
+//         $this->_timeout = $timeout;
 
-        $this->endpoint = is_null($endpoint) ? self::ED_AUTO : $endpoint;
+//         $this->endpoint = is_null($endpoint) ? self::ED_AUTO : $endpoint;
+//     }
+    
+    public function setBucketname($bucketname)
+    {
+    	$this->_bucketname = $bucketname;
+    }
+    
+    public function setUsername($username)
+    {
+    	$this->_username = $username;
+    }
+    
+    public function setPassword($password)
+    {
+    	$this->_password = md5($password);
+    }
+    
+    public function setTimeout($timeout)
+    {
+    	$this->_timeout = $timeout;
+    }
+    
+    public function setEndpoint($endpoint)
+    {
+    	$this->endpoint = $endpoint;
+    }
+    
+    /**
+     * 将从form收集到的文件上传到又拍云中，返回上传后的url。未防止上传时出现重复的文件名导致覆盖，默认上传文件名为当前时间戳
+     * @param UploadedFile $file 从form收集来的上传文件
+     * @param stromg $filename 上传到又拍云中的文件名，不含扩展名，如果未指定则为上传时的时间戳
+     * @return string 上传的文件的url地址，自主站返回的为相对路径，不是自主站则返回图片完整的url
+     */
+    public function upload($file, $filename=null)
+    {
+    	if($filename == null) {
+    		$filename = time();
+    	}
+    	$file_handler = fopen($file->tempName, 'r');
+    	$uploadpath = $this->basePath . $filename . "." . $file->extension;
+		$this->writeFile($uploadpath, $file_handler, true);
+		fclose($file_handler);
+		if(!$this->useOwnDomain) {
+			$uploadpath = "http://" . $this->_bucketname . "b0.upaiyun.com" . $this->basePath . $uploadpath;
+		}
+		return $uploadpath;
     }
 
     /**
