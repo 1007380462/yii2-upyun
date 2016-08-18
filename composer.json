@@ -4,8 +4,15 @@
     "keywords": ["UPYUN", "sdk", "yii2"],
     "type": "library",
     "minimum-stability": "stable",
-    "homepage": "https://github.com/upyun/php-sdk/",
+    "homepage": "https://github.com/lucasguo/yii2-upyun/",
     "license": "MIT",
+    "repositories":
+    [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lucasguo/yii2-upyun/"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "yiisoft/yii2": ">=2.0.6",
