@@ -3,6 +3,7 @@ namespace lucasguo\upyun;
 
 use yii\base\Component;
 use yii\web\UploadedFile;
+use Exception;
 class UpYun extends Component
 {
     const VERSION = '2.2.0';
