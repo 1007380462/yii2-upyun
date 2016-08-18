@@ -18,7 +18,7 @@
 ### 安装
 推荐使用 `composer` 安装
 ```
-composer require lucasguo/yii2-upyun
+composer require lucasguo/yii2-upyun:dev-master
 ```
 
 <a name="init"></a>

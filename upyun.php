@@ -108,7 +108,7 @@ class UpYun extends Component
 		$this->writeFile($uploadpath, $file_handler, true);
 		fclose($file_handler);
 		if(!$this->useOwnDomain) {
-			$uploadpath = "http://" . $this->_bucketname . "b0.upaiyun.com" . $this->basePath . $uploadpath;
+			$uploadpath = "http://" . $this->_bucketname . ".b0.upaiyun.com" . $uploadpath;
 		}
 		return $uploadpath;
     }
