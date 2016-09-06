@@ -102,7 +102,9 @@ class UpYun extends Component
     public function upload($file, $filename=null)
     {
     	if($filename == null) {
-    		$filename = time();
+			list($microtimefloat, $time) = explode(" ", microtime);
+			list($zero, $microtime) = explode(".", $microtimefloat);
+    		$filename = $time . $microtime;
     	}
     	$file_handler = fopen($file->tempName, 'r');
     	$uploadpath = $this->basePath . $filename . "." . $file->extension;
